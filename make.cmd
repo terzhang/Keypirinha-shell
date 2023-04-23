@@ -1,7 +1,7 @@
 @echo off
 setlocal
 
-set PACKAGE_NAME=Command
+set PACKAGE_NAME=Shell
 set INSTALL_DIR=%APPDATA%\Keypirinha\InstalledPackages
 
 if "%1"=="" goto help

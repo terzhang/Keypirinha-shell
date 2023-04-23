@@ -1,8 +1,7 @@
-import os
+
 import re
 import subprocess
 import keypirinha as kp
-import keypirinha_util as kpu
 
 class Command(kp.Plugin):
 
@@ -20,8 +19,8 @@ class Command(kp.Plugin):
 
         actions = []
 
-        actions.append(self._set_action('keep_open', 'Keep Open', 'Run the command and keep CMD open.'))
-        actions.append(self._set_action('close_cmd', 'Close CMD', 'Close CMD after running the command.'))
+        actions.append(self._set_action('keep_open', 'Keep Open', 'Run the command and keep shell open.'))
+        actions.append(self._set_action('close_shell', 'Close shell', 'Close shell after running the command.'))
 
         self.set_actions(self.ITEM_COMMAND, actions)
 
@@ -47,31 +46,28 @@ class Command(kp.Plugin):
     def on_execute(self, item, action):
         if item.category() != self.ITEM_COMMAND:
             return
-
-        prompt = 'C:\\Windows\\System32\\cmd.exe'
+        
+        prompt = 'wt'
 
         [operator, command] = self._split_target(item.target())
 
-        if operator == '>':
-            close = '/k'
-        elif operator == '>>':
-            close = '/c'
 
-        if action and action.name() == "keep_open":
-            close = '/k'
-        elif action and action.name() == "close_cmd":
-            close = '/c'
+        if operator == '>>' or (action and action.name() == "close_shell"):
+            # Runs a shell command and prompt for enter before exiting
+            msg="read -p 'Press enter to exit...' x"
+            shell = ['sh', '-c', command + ' && ' + msg]
+            print(f'running one time command: {command}')
+        elif operator == '>' or (action and action.name() == "keep_open"):
+            # Runs a shell command in an existing windows terminal window (if possible)
+            # then run a shell console after
+            shell_list = [*command.split(' '), '&&', 'bash']
+            shell = [prompt, '-w', '1', 'nt', '-p', 'Bash', 'sh', '-c', ' '.join(shell_list)]
+            print(f'running command: {command}')
 
-        if os.path.isfile(prompt):
-            try:
-                cmd = [prompt]
-                cmd.append(close)
-                cmd.append(command)
-                subprocess.Popen(cmd, cwd = os.path.dirname(prompt))
-            except Exception as e:
-                print('Exception: CMD - (%s)' % (e))
-        else:
-            print('Error: Could not find your %s executable.\n\nPlease edit path' % (prompt))
+        try:
+            subprocess.Popen(shell)
+        except Exception as e:
+            print('Exception: shell - (%s)' % (e))
 
     def on_activated(self):
         pass
@@ -95,7 +91,7 @@ class Command(kp.Plugin):
         if operator == '>':
             close_msg = ''
         elif operator == '>>':
-            close_msg = ' and close CMD.'
+            close_msg = ' and close shell.'
 
         return self.create_item(
             category = self.ITEM_COMMAND,
