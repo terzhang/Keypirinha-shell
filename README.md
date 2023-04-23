@@ -60,6 +60,15 @@ There are two actions available irrespective of the configuration.
 - **Keep Open**: Do not close the prompt after running the command.
 - **Close CMD**: Close the prompt after running the command.
 
+## Build
+
+Here's how to build the plugin yourself:
+1. Make you have the [Keypirinha SDK](https://github.com/Keypirinha/SDK) cloned to local
+2. Go into the SDK directory, setup your environment running `cmd/kpenv.cmd` in Command Prompt or Powershell
+    Now your local PATH is modified with path to Keypirinha's SDK
+3. Change back to your package directory, and run `make.cmd`
+4. A new build will be generated in the [build](./build) directory
+
 ## License
 
 MIT
