@@ -7,8 +7,9 @@ This plugin provides an easy way to execute simple commands from Keypirinha.
 
 ## Install:
 
-Download the `Shell.keypirinha-package` file is downloaded,
-move it to the `InstalledPackage` folder located at:
+Download the [Shell.keypirinha-package](https://github.com/terzhang/Keypirinha-shell/releases/download/1.0.0/Shell.keypirinha-package) file,
+
+Move it to the `InstalledPackage` folder located at:
 
 - `Keypirinha\portable\Profile\InstalledPackages` in **Portable mode**
 - **Or** `%APPDATA%\Keypirinha\InstalledPackages` in **Installed mode** (the
